@@ -1,0 +1,838 @@
+<!DOCTYPE html> 
+<html>
+<head>
+
+
+ <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+  
+<meta http-equiv="Content-Security-Policy"   content="" /> 
+  <!--
+  <meta http-equiv="Content-Security-Policy"   content="default-src * ; connect-src *; script-src * 'unsafe-eval'; object-src *; style-src *; img-src *; media-src *; frame-src *; " /> 
+<meta http-equiv="X-Content-Security-Policy" content="default-src *; script-src * 'unsafe-eval'; object-src *; style-src *; img-src *; media-src *; frame-src *; " /> 
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline'; style-src *; media-src *; script-src *; ;" /> -->
+ 
+
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
+<title>Master App</title>
+ 
+<link href="http://m.josue45.com/mobile/mobileTest/css.css" rel="stylesheet" type="text/css"/>
+<link href="http://m.josue45.com/jquery-mobile/jquery.mobile.theme-1.0.min.css" rel="stylesheet" type="text/css"/>
+<link href="http://m.josue45.com/jquery-mobile/jquery.mobile.structure-1.0.min.css" rel="stylesheet" type="text/css"/>
+ 
+<!-- external files already-->
+<script src="http://m.josue45.com/jquery-mobile/jquery-1.6.4.min.js" type="text/javascript"></script>
+<!-- <script src="http://m.josue45.com/mobile/mobileTest/js/jquery.innerfade.js" type="text/javascript"></script> -->
+<script src="http://m.josue45.com/jquery-mobile/jquery.mobile-1.0.min.js" type="text/javascript"></script>
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+<script type="text/javascript" language="javascript">
+//this.where = "size";
+//http://m.josue45.com/
+//http://www.m.josue45.com/
+   if(localStorage.getItem("userId") != null && localStorage.getItem("userId") != ""){
+	var id = localStorage.getItem("userId");
+	}else{
+
+		//id 6 is for app tester
+		var id=12;
+		
+	}
+	
+	
+function thePath(){ //this will return the path of current user
+		return id;
+			}
+ 
+//**************************************
+//place user id here to make it an app
+
+		//alert(thePath());
+		//alert(this.id);
+
+//id here for app
+//**************************************
+//**************************************
+//**********josue45.com baby********
+//**************************************
+	/*
+	function sendEmail(){
+		var name = document.getElementById("name");
+					var phone = document.getElementById("phone");
+					var email = document.getElementById("email");
+					var date = document.getElementById("date");
+					var description = document.getElementById("description");
+					var emailTo = document.getElementById("emailTo");
+					if(name.value.length > 0 && phone.value.length > 0 && email.value.length > 0 && date.value.length > 0 && description.value.length > 0){
+						//if(name.value != null & phone.value != null & email.value != null & date.value != null & description.value != null){
+					$.ajax({
+						
+						type:"POST",
+						url:"sendEmail.php",
+						data:{to:emailTo.value, Name:name.value, Phone:phone.value, Email:email.value, DATE: date.value, Description:description.value}
+						})
+						.done( function(){
+								$("#report").empty();
+								$("#report").append("<h1>Email Sent.</h1>");
+								name.value = ''; phone.value = ''; email.value = ''; date.value = ''; description.value = '';
+							});
+					}else{
+						$("#report").empty();
+						$("#report").append('<h2 style="color:red">Please include All Info</h2>');
+						//$("#report").hide(2000);
+						//setTimeout($("#report").empty().css("display", "block"), 3000);
+						}
+				
+			}
+			*/
+		
+	
+$(document).ready( function(){
+		
+		
+			
+			phones();
+		
+	var data = '';
+	var date = new Date();
+	//********************************************************************************************************************
+
+
+		$.getJSON(yeahBaby()+"mobile/"+thePath()+"/feed.json", function(info){
+			
+		
+		for(var i=0; i<info.length; i++){
+				this.info = info;
+				
+				var li = document.createElement("li");
+				var a  = document.createElement("a");
+					a.innerHTML = info[i].linkName;
+					a.setAttribute("href", "#page4");
+					a.setAttribute("id", i);
+					//a.setAttribute(""
+					li.appendChild(a);
+					$("#mylistB").append(li);
+					
+					
+					//for(var i=0; i<url.length; i++){
+					if(info[i].linkName){
+								//console.log("pirmin Tv line 130 fix");
+								
+								var fullurl = '';
+								var fullurl = info[i].url;
+								a.onclick = function(){
+									
+										//alert(this.id);
+										//alert(info[this.id].url);
+										clearTheList();
+										//console.log(fullurl);
+										$.getJSON(info[this.id].url, function(data){
+											console.log(data.pageInfo.totalResults);
+												for(var i=0; i<data.items.length; i++){
+													//if(data.pageInfo.totalResults<50){
+														if(data.items[i].snippet.title){
+														console.log(data.items[i].snippet.title);
+														createList(data.items[i].snippet.resourceId.videoId, data.items[i].snippet.title, data.items[i].snippet.description);
+														//}
+													}
+												}
+													$("#videos").listview("refresh");
+											});
+									}
+		
+							}
+					
+							
+							
+				};
+				
+				$("#mylistB").listview("refresh");		
+		
+			
+		});
+		
+ 
+	function createList(videoId, title, description){
+			
+					var li = document.createElement("li");
+						li.setAttribute("id", videoId);
+					var a = document.createElement("a");
+						a.innerHTML = title;
+						a.setAttribute("id", videoId);
+						a.setAttribute("href", "#page5");
+						a.onclick = showTheVideo;
+						li.appendChild(a);
+						$("#videos").append(li);
+			}
+			
+	function clearTheList(){
+			$("#videos").empty();
+			}
+			
+
+	function showTheVideo(){
+			
+		
+					console.log(this.id);
+					$("#myVideo").empty();
+					//$("#myVideo").append(
+					//$("#myVideo").append($(this).text());
+					console.warn("fix this bug on the video on go back from full screen*****************************************************");
+						 	//<iframe width="560" height="315" src="https://www.youtube.com/embed/gauN0gzxTcU" frameborder="0" allowfullscreen></iframe>
+					//var video = '<iframe width="100%" src="https://www.youtube.com/embed/'+this.id+'" frameborder="0" allowfullscreen></iframe>';
+					// fix this--------------------------------------------------------------------------------------------------------------------------for ios
+					var video = '<iframe id="player" type="text/html" width="100%" height="300" src="http://www.youtube.com/embed/'+this.id+'?fs=0" frameborder="0" ></iframe>';
+					//var video = '<video controls="controls" class="video-stream" x-webkit-airplay="allow" data-youtube-id="'+this.id+'" src="http://www.youtube.com/embed/'+this.id+'"></video>';
+					
+					//var video = '<iframe width="100%" src="http://www.youtube.com/embed/'+this.id+'" frameborder="0" allowfullscreen> </iframe>';
+					$("#myVideo").append(video);	
+			}
+		
+	function appSettings(){
+		$.getJSON(yeahBaby()+"mobile/"+thePath()+"/appSettings.json", function(data){
+				 //alert(data[0].phoneOnAllPages);
+				if(data[0].phoneOnAllPages == 1) {
+					setTimeout('$("#phoneStuff").clone().appendTo("#phoneStuffB")', 2000);
+					}
+				})
+		}
+		// run phones on all app !
+				
+	//********************************************************************************************************************starts in line 53
+
+	//****************************************************************************************************
+	//gets the numbers
+	//numbers.php
+	function phones(){
+		$.getJSON(yeahBaby()+"mobile/assets/numbers.php?iduser="+thePath(), function(info){
+	setFooter(info.companyName); //line 250
+
+	console.warn("Call")
+		$("#xyz").empty().append("CALL");
+		$("#call").attr("href","tel:"+info.workPhone);
+		
+		$("#xyzz").empty().append("TEXT");
+		$("#text").attr("href", "sms:"+info.cellPhone);
+		
+		});
+	}
+	
+	//****************************************************************************************************
+	
+	//will load the links for mobile site generated dinamically
+	
+	
+	$.getJSON(yeahBaby()+"mobile/listofpages.php?iduser="+thePath(), function(info){
+	//$("#mylist").empty();
+		for(var i=0; i<info.length; i++){
+			
+			
+			
+			if(info[i].Type == "list-divider"){
+				//fix********************************************************************************
+				//$("#mylist").append("<li data-role=\"list-divider\">"+info[i].name+"</li>");
+				$("#mylist").append("<li class=\"list-divider\">"+info[i].name+"</li>");
+				}else{
+			
+			console.log(info[i].name);
+			$("#mylist").append("<li><a id="+ info[i].id+" href=\"#page2\">"+info[i].name+"</a></li>");
+			
+			}}
+			$("#mylist").listview('refresh');
+			
+			
+							$("#mylist > li > div > div > a").click( function(){
+							//$("div > a").click( function(){ //original needs to be fixed
+							console.log("fix this line 164");
+								$("#titlebaby").text($(this).text());
+								console.log($(this).text());
+								console.log($(this).attr("id"));
+							
+								$.ajax({
+									url: "http://m.josue45.com/class/JosueMunoz.php?getInfo="+$(this).attr("id")+"&type=ready",
+									})
+									.done( function (data){
+										
+										$(".b").empty().append(data);
+										
+										})	
+							})
+		});
+	
+	
+	
+	////////////////////////////////////////////////////////////////////////////////////////////
+	//look and fix
+	////////////////////////////////////////////////////////////////////////////////////////////
+	//var f = "http://m.josue45.com/";
+	$.getJSON(yeahBaby()+"mobile/logoandbackground.php?iduser="+thePath(), function(data){
+		//$.getJSON("http://m.josue45.com/mobile/logoandbackground.php?iduser="+thePath(), function(data){
+	
+	if(data.logo){
+		console.log(thePath()+'/'+ data.BackgroundImage);
+		$('#logo').attr("src", data.logo);
+		
+	}
+	
+		//$("#page, #page2").css("background-color", data.backgroundColor);
+		if(data.BackgroundImage != 'http://www.m.josue45.com/mobile/assets/replace_background.png' ){
+		$("#page, #page2, #appGallery, #products").css("background-image", "url("+data.BackgroundImage+")");
+		console.log("Fix line 186:");
+		}
+		
+		//$("#page, #page2").css("background-position", "top center");
+		//$("#page, #page2").css("background-size", "100%");
+		//$("#slogan").css("color", data.linksFontColor);
+		$("#call >span").first().addClass('t2m-phone-'+data.iconClass);
+		$("#text >span").first().addClass('t2m-sms-'+data.iconClass);
+		
+		//$("li a").css("color", data.linksFontColor);	
+		//$(".b").css("background",  "linear-gradient("+data.b+")");
+		//$(".b").css("background-color", data.b);
+		//$("#a").css("margin-top",data.HeaderMarginTop+" !important");
+		});	
+		
+ 
+	
+	//************************************************************************************************************************** revise and fix
+	//mainPoints 
+	//will use these on sample.html
+	/*
+	$.getJSON(yeahBaby()+"mobile/"+thePath()+"/main.json", function(data){
+		//$.getJSON("http://m.josue45.com/mobile/"+thePath()+"/main.json", function(data){
+		//main points from json file
+	if(data){
+			for(var i = 0; i<data.length; i++){
+					//console.log(data[i].a);
+					var li = document.createElement("li");
+						li.innerHTML = data[i].a;
+						$("#mainPoints").append(li);
+				}
+			}
+			//	$("#mylist").listview('refresh');
+			$("#mainPoints").innerfade({ speed: 'slow', timeout: 3000, type: 'sequence', containerheight: '' });
+		});
+		
+	*/	
+	//mainPoints end
+	//**************************************************************************************************************************
+		
+	//**************************************************************************************************************************
+	//socialMedia
+	$.getJSON(yeahBaby()+"mobile/"+thePath()+"/socialMedia.json").success(function(data){
+		//$.getJSON("http://m.josue45.com/mobile/"+thePath()+"/socialMedia.json", function(data){
+			//create image and link to site
+			//create copyrights for each icon
+			
+			if(data){
+				for(var i = 0; i<data.length; i++){
+					var a 	= document.createElement("a");
+						a.setAttribute("href", data[i].url);
+						
+					var img = document.createElement("img");
+						img.setAttribute("alt", data[i].name);
+						img.setAttribute("src", "http://m.josue45.com/mobile/assets/socialMediaIcons/"+data[i].name+".png");
+						a.appendChild(img);
+						$("#sm").append(a);
+				}
+				
+			}
+			
+			
+		}).error(function(){
+			
+			$("#sm").css("display", "none");
+			});	
+	//socialMedia end
+	//**************************************************************************************************************************
+	
+		//setFooter()
+function setFooter(company){
+		if(company){
+			console.log("seting footer company")
+		$("h4").empty().append(company +" "+ date.getFullYear());
+		}else{
+			$("h4").empty().append("fixxxxxxxxxxxxxxxxxxx");
+			}
+	}		
+	});
+
+</script>
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+</head> 
+<body> 
+<!--***************************************************************page start********************************************************** -->
+<div data-role="page" id="page">
+
+
+<div class="writeReviewWrap" id="writeReviewWrap">
+<span id="closeReview" class="closeReview">X</span>
+<div id="writeReview" class="writeReview">
+<input name="" type="text" id="reviewName" required placeholder="Full name">
+<textarea name="" cols="" rows="" id="reviewTextArea" required placeholder="Comment"></textarea>
+<div class="reviewIcon" id="reviewIcon">Send</div>
+</div>
+</div>
+
+<!-- contact us start-->
+<!-- needs css style-->
+<div id="contactUsWrap" class="contactUsWrap">
+<div id="contactUs" class="contactUs">
+<input type="text" id="firstNameContactUs" required placeholder="First Name">
+<input type="text" id="lastNameContactUs" required placeholder="lastname">
+
+<select name="contactByContactUs">
+<option value="email">Email Me</option>
+<option value="phone">Call Me</option>
+</select>
+<input type="email" id="emailContactUs" placeholder="Email">
+<input type="number" id="phoneContactUs" placeholder="Phone">
+<input type="number" id="zipContactUs" placeholder="Zip">
+<textarea placeholder="Comments" id="commentsContactUs"></textarea>
+<div class="reviewIcon">Send</div>
+</div>
+</div>
+<!-- contact us end-->
+
+
+<div id="testing"></div>
+<!-- menu icon for app-->
+<div id="menuTopA">
+<div class="writeReviewIcon"><img src="assets/write-review-icon.png" id="write-review-icon" width="30" height="30"></div>
+<div id="menuApp">
+
+	<ul>
+	  <li></li>
+      <li></li>
+      <li></li>
+    </ul>
+
+</div>
+</div>
+<!-- menu icon end-->
+
+<div id="jmmenu">
+    <ul id="jmmenuul">
+    	<li>My Account</li>
+        <li onClick="logMe.logIn()" id="blahhh">Log In</li>   
+    </ul>
+</div>
+
+
+  <!--<div id="phoneNumberHeader">---------</div>-->
+ 
+	<div id="a" class="a">
+        <img id="logo" name="" src="" alt="">
+            <!-- <div id="slogan"> -->
+        <!-- </div> --><!--<ul id="list">--------------------</ul>-->
+    </div>
+  	<!--<div id="aa">---</div>-->
+  	
+    <!--
+  	<div class="mainPoints">
+    	<ul id="mainPoints"></ul>
+    </div>
+  -->
+  
+<div id="phoneStuff">
+    <div class="phoneStuffWrap">
+        <a class="t2m-boton" id="call">
+        	<span></span>
+       		<span id="xyz"></span>
+        </a>
+        <a class="t2m-boton" id="text">
+        	<span></span>
+            <span id="xyzz"></span>
+        </a>
+    </div>
+</div> 
+    
+     
+	<div data-role="content">
+    	<!--
+        <div class="r">
+        
+        <input name="" type="text">
+        
+        </div>
+        
+        <ul id="test">
+        	<li>hi there</li>
+            <li>whats up</li>
+        </ul>
+        --> 
+        <ul id="mylistB" data-role="listview" data-inset="true"></ul>
+        <ul id="mylistC" data-role="listview" data-inset="true"></ul>
+        <ul id="mylist" data-role="listview" data-inset="true"></ul>
+        
+    </div>
+    <!-- ************************************************************************************************************************** -->
+	<!-- footer start -->
+    <div data-role="footer" id="c">
+   	
+        <!-- social media start -->
+           <div id="sm" class="sm"></div>
+        <!-- social media end -->
+    
+        <h4>Page Footer</h4>
+
+	</div>
+    <!-- footer end -->    
+	<!-- ************************************************************************************************************************** -->
+    
+</div>
+<!--***************************************************************page end********************************************************** -->
+
+
+<div data-role="page" id="page2" data-add-back-btn="true">
+
+	<div data-role="header">
+    	
+		<h1 id="titlebaby">this page</h1>
+	</div>
+    
+    <div id="phoneStuffB"></div>
+    
+	<div class="b">	
+		Content		
+	</div>
+	     
+	<div id="c" data-role="footer">
+		<h4>Page Footer</h4>
+	</div>
+</div>
+
+<!-- All cars view page-->
+<div data-role="page" id="carPage" data-add-back-btn="true">
+	<div data-role="header">
+    	
+	<h1 id="carTitle">test carssssssss</h1>
+	</div>
+    
+    <div id="phoneStuffB"></div>
+    
+	<ul class="b" id="b">	
+		Content	car	
+	</ul>
+    
+	    
+	<div id="c" data-role="footer">
+		<h4>Page Footer</h4>
+	</div>
+</div>
+
+
+
+<div data-role="page" id="viewGallery" data-add-back-btn="true">
+    <div data-role="header">
+   
+      <h1 id="viewItemTitle">Gallery test</h1>
+    </div>
+  
+  
+    	<ul id="viewGalleryItems" class="viewGalleryItems"> </ul>
+
+
+  
+    <div data-role="footer">
+      <h4 id="viewItemFooter">Footer</h4>
+    </div>
+  </div>
+
+<!-- viewItemPlease-->
+<div data-role="page" id="viewItemPlease" data-add-back-btn="true">
+    <div data-role="header">
+      <h1 id="viewItemTitle">Header</h1>
+    </div>
+    <div data-role="content" class="newViewItems">
+    	<ul id="viewItemContent" class="viewItems">hello</ul>
+    </div>
+    <div data-role="footer">
+      <h4 id="viewItemFooter">Footer</h4>
+    </div>
+  </div>
+
+
+
+<div data-role="page" id="page3">
+<div data-role="header">
+		<h1>Page Three</h1>
+	</div>
+	<div data-role="content">	
+		Content		
+	</div>
+	<div data-role="footer">
+		<h4>Page Footer</h4>
+	</div>
+</div>
+
+<!-- this space is for youtube videos if have any-->
+<div data-role="page" id="page4" data-add-back-btn="true">
+	<div data-role="header">
+		<h1>Videos</h1>
+	</div>
+	<div data-role="content">	
+				<ul id="videos" data-role="listview"></ul>
+	</div>
+	<div data-role="footer">
+		<h4>Page Footer</h4>
+	</div>
+</div>
+
+<!-- video -->
+<div data-role="page" id="page5" data-add-back-btn="true">
+	<div data-role="header">
+		<h1>Videos</h1>
+	</div>
+		
+				<div id="myVideo"></div>
+	
+	<div data-role="footer">
+		<h4>Page Footer</h4>
+	</div>
+</div>
+
+
+<!-- tweets end -->
+<div data-role="page" id="tweets">
+  <div data-role="header">
+    <h1>Tweets</h1>
+  </div>
+  <ul data-role="listview" class="tweets" id="bbbb"></ul>
+  <div data-role="footer">
+    <h4>Footer</h4>
+  </div>
+</div>
+
+
+
+<div data-role="page" id="appGallery" data-add-back-btn="true">
+<div id="takePictureB">TAKE PIC</div>
+<div id="folderPictureB">+Folder</div>
+
+  <div data-role="header">
+  
+    <h1 id="appGalleryTitle">Header</h1>
+  </div>
+  
+  <div id="here">	
+		Content		
+	</div>
+  
+  <div data-role="footer">
+    <h4>Footer</h4>
+  </div>
+</div>
+
+
+
+<div data-role="page" id="products" data-add-back-btn="true">
+  <div data-role="header">
+    <h1>Insert Product</h1>
+  </div>
+  
+  <style type="text/css">
+  
+  @media only screen and (min-width: 320px){
+	
+	
+	#screenSize{font-size:.8em; padding:10px; color:#FF0; margin:0px; background-color:red;}
+	#b span{ color:#666; display:block; float:left; margin:0px; padding:2px 10px; line-height:13px; font-family:Verdana, Geneva, sans-serif; font-size:1em; font-weight:100;}
+	
+}
+@media only screen and (min-width: 360px){
+#b span{color: #666;
+    float: left; font-family:Verdana, Geneva, sans-serif; 
+    font-size: 1.3em;
+    height: auto;
+    margin: 0;
+    padding: 5px 10px;
+    text-align: left;
+    text-shadow: none;
+    width: auto; line-height:14px;}
+	
+}
+
+
+.contactUsWrap{ display:none;  width:100%; height:100%; min-height:105%; padding:0px; margin:0px; background:-webkit-linear-gradient(#000, #FFF); position:absolute; z-index:500; opacity:1;}
+.contactUs{ position:absolute; width:100%; border-radius:3px; margin:0px; padding:0px; top:20%;  background:#CCC; height:auto; overflow:hidden; z-index:1;}
+.contactUs input, .contactUs textarea{ width:65%; padding:10px; margin:20px auto; display:block; border-radius:2px; border:none;}
+.contactUs input[type="button", type="zip"]{ width:250px; opacity:1; margin:0px; padding:0px; border-radius:2px; box-shadow:none; border:none; overflow:hidden; display:block; color:#FFF; background:green;} 
+
+ 
+ 
+ 
+.writeReviewIcon{ position:fixed; top:10px; right:50px;}
+#writeReviewWrap{display:none; z-index:100;}
+.closeReview{ font-size:1.5em; width:auto; left:5px; color:#FFF; background:#333; padding:10px; line-height:normal; border-radius:5px; opacity:.5; position:absolute; top:21%; z-index:20;}
+.writeReviewWrap{  width:100%; height:100%; min-height:105%; padding:0px; margin:0px; background:-webkit-linear-gradient(#000, #FFF); position:absolute; opacity:1;}
+.writeReview{ position:absolute; width:100%; border-radius:3px; margin:0px; padding:0px; top:20%;  background:#CCC; height:auto; overflow:hidden; z-index:1;}
+.writeReview input, .writeReview textarea, .writeReview select{ width:65%; padding:10px; margin:20px auto; display:block; border-radius:2px; border:none;}
+.writeReview input[type="button"]{ width:250px; opacity:1; margin:0px; padding:0px; border-radius:2px; box-shadow:none; border:none; overflow:hidden; display:block; color:#FFF; background:green;} 
+.reviewIcon{width:auto; text-shadow: 1px 1px 1px #FFF; border-radius:5px; text-align:center; font-family:Verdana, Geneva, sans-serif; font-size:1.2em; font-weight:bold; text-decoration:none; height:auto; display:block; margin:auto; padding:20px;
+  color:black !important; background:-webkit-linear-gradient(#CCC, #999, #ccc); z-index:2; }
+
+/*
+li:hover{ background:white !important; color:#666;}
+li:visited{ background:white;}
+li:active{ background:white;}
+ */
+  
+  .donateToday{width:auto; text-shadow: 1px 1px 1px #FFF; border-radius:5px; text-align:center; font-family:Verdana, Geneva, sans-serif; font-size:15px; font-weight:bold; text-decoration:none; height:auto; display:block; margin:auto; padding:20px;
+  color:black !important; background:-webkit-linear-gradient(#CCC, #999); position:fixed; z-index:2; bottom:20px; right:20px; }
+  .donateToday:hover{
+	
+	  }
+  a.callToday{ width:auto; text-shadow: 1px 1px 1px #FFF; border-radius:5px; text-align:center; font-family:Verdana, Geneva, sans-serif; font-size:20px; font-weight:bold; text-decoration:none; height:auto; display:block; margin:auto; padding:20px;
+  color:black !important; background:-webkit-linear-gradient(#CCC, #999);}
+  ul.viewGalleryItems{ padding:0px; margin:0px auto; width:auto;
+	height:auto; min-height:600px; overflow:hidden;
+ background:-webkit-linear-gradient(45deg, #fff, #999, #FFF); border-radius:2px;}
+
+.viewGalleryItems li{ font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif; font-size:12px;
+	width:auto; margin:10px 5px; padding:20px;
+	height:auto; background:-webkit-linear-gradient(45deg, #ccc 50%,#888); list-style:none;
+	}
+.newViewItems{ background:#FFF;}
+<!-- Targets the image of the car-->
+.viewItems img{ border-radius:2px !important; border:5px solid #999;}
+
+.viewGalleryItems li:first-child{ margin-top:0px;}
+.viewGalleryItems li:last-child{ margin-bottom:0px;}
+.viewGalleryItems span{
+	font-size:16px; color:#000;}
+.viewGalleryItems article{ font-family:Verdana, Geneva, sans-serif; font-size:14px;}
+.viewGalleryItems img{ border:2px solid #333; display:block; margin:auto; border-radius:5px; overflow:hidden;}
+  
+  
+  
+  #myForm{ width: auto; min-height:590px;
+height: auto; box-shadow:2px 2px 5px #000;
+background: -webkit-linear-gradient(45deg, #CCC 50%, #FFF 50%, #CCC);
+padding: 10px;
+display: block;
+margin: 20px;
+border-radius: 5px;}
+
+
+
+
+<!-- #myForm input[type="select"]{ background:none !important; color:#FFF;} -->
+#myForm input{ padding:0px; margin:0px; opacity:1; }
+#myForm input[type="text"], #myForm input[type="number"], #myForm textarea{color:blue !important;
+width:80%; padding:10px; display:block; font-family:Verdana, Geneva, sans-serif; font-size:16px; margin:20px auto;
+border-radius:3px; background:white; height:30px; text-shadow:none; top:-20px;  }
+  
+ ui-input-text{ color:#F00;}
+
+.dui-btn{ background:white; width:100%; color:#666; border-radius:10px; overflow:hidden;}
+
+
+.r{ background:#FFF; border:1px solid #CCC; border-radius:8px; padding:20px; margin:10px 0;}
+.r > input{ padding:4%; width:92%;}
+
+ul#test{ padding:0px; margin:0px;}
+ul#test > li{ background:#CCC; color:#000; padding:10px; list-style:none; font-family:Verdana, Geneva, sans-serif; font-size:1.2em; text-shadow:1px 1px 2px #FFFFFF;}
+ul#test >li:first-child{ border-radius:10px 10px 0 0; border:3px solid red, 1px solid #999;}
+ul#test >li:last-child{ border-radius:0 0 10px 10px;}
+
+ul.car{padding:0px; margin:0px; list-style:none;}
+
+li.car:nth-child(even){background: #CCC;}
+
+li.car{  
+background: rgba(0, 0, 0, 0) -webkit-linear-gradient(#cccd, #ccc) repeat scroll 0 0;
+    border-radius: 2px;
+    color: black; line-height:30px;
+    font-family: Verdana;
+    font-size: 20px;
+    margin:  8px;
+    padding: 8px;
+    text-shadow: 1px 2px 2px #CCC;
+    width: auto;
+}
+.b{ padding:10px;}
+/*
+customCss{ width:40%; float:left; color:#FFF;}
+ #customCss2{ width:60%; float:left; color:#FFF;}
+ */
+	
+	.moduleB{ margin:10px auto;}
+	
+	#folderPictureB{ width:auto; padding:5px; border-radius:5px; color:white; background-color:#999; position:fixed; bottom:10px; right:50px;}
+  </style>
+  
+  <div id="myForm">
+  
+  <summary>Create a category if you havent. Products or serveices for sale will display only if you have it set up with paypal.</summary>
+  
+  	<input type="button" id="createCategory" value="Create Category" onClick="app.setCategory()"/>
+    
+ 	 <select name="selectmenuProducts" id="selectmenuProducts" onChange="app.setCategory()">
+      	<option value="createCategory">Create Category</option>
+        <option value="option2" id="option2" selected>test</option>
+      	</select>
+      
+        
+  		<input name="imageFilename"  type="hidden" value="1">
+        
+      	<input type="text" name="textinput" placeholder="Product name" id="Name" value="" required />
+     
+        <input type="number" name="Price"  placeholder="Price" id="Price" value="" required />
+         
+        <input type="text" name="textinput" id="shortDescription" placeholder="Short description" value="" required />
+        
+        <textarea rows="8" name="textarea" id="LongDescription" placeholder="Long description"></textarea>
+          
+        <input name="" id="sellProducts" value="Submit" type="submit">
+          
+  </div>
+  
+  
+  <div data-role="footer">
+    <h4>Insert Product</h4>
+  </div>
+</div>
+
+<!-- no internet page -->
+<div data-role="page" id="noConnection">
+  <div data-role="header">
+    <h1>Opps</h1>
+  </div>
+  <div data-role="content">This app requieres a internet connection to work!</div>
+  <div data-role="footer">
+  
+    <h4>Opps!</h4>
+  </div>
+</div>
+
+
+<script type="text/javascript" src="cordova.js"></script>   
+
+<!--<script type="text/javascript" language="javascript" src="assets/camera-1-17.js"> </script> -->
+  <script type="text/javascript" language="javascript" src="http://m.josue45.com/mobile/mobileTest/camera-1-17.js"> </script>
+
+
+<script type="text/javascript">
+			setTimeout("app.initialize()", 3000);
+			window.onload = function(){
+				
+		setTimeout("module()", 1000);
+		setTimeout("appSettings()", 1600);
+		
+	
+document.addEventListener("scroll", lookAtImagesPosition, false);		
+				//document.addEventListener("scroll", lookAtImagesPosition, false);
+				//setTimeout("lookAtImagesPosition()",1000);
+				
+		}
+        </script>  
+        
+ <!-- <script src="http://www.josue45.com/assets/js/jm.js" type="text/javascript"></script> -->
+</body>
+</html>
